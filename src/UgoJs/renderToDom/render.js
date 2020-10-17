@@ -1,26 +1,16 @@
 import Component from './Component'
+import VirtualDom from '../DomTree/DomTree';
 
-import DomTree from '../DomTree/Dom';
 
-function render(element, container) {
-    const tree = DomTree.getInstance(container);
-    
-    if(element instanceof Component) {
-        const renderedElement = element.render();
-        addElementToDom(renderedElement, container)
-    } else if(element instanceof Function) {
-        const renderedElement = element()
-        addElementToDom(renderedElement, container)
-    } else {
-        addElementToDom(element, container)
-    }
-    console.log(tree)
-}
+function render(node, container) {
+    const dom = VirtualDom.getInstance(node);
+    // console.log(dom);
+    container.append(node.render());
+};
 
-function addElementToDom(element, container) {
-    const tree = DomTree.getInstance(container);
-    tree.setRoot()
-    container.append(element);
+function reRender(node) {
+    const dom = VirtualDom.getInstance(node);
+    dom.find(node);
 }
 
 export default render;

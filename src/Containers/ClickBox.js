@@ -14,7 +14,7 @@ class ClickBox extends Component{
     }
     render() {
         return(
-            createElement('div', {innerText: 'click Me!', onClick:this.clickHandler.bind(this)})
+            createElement('div', {innerText: this.props.innerText, onClick:this.clickHandler.bind(this)})
         )
     }
 }

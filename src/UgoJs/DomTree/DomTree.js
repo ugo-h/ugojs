@@ -5,7 +5,7 @@ export default class Tree extends Singleton {
     constructor(root){
         super();
         this.root = root;
-        this.oldRoot = root;
+        this.oldRoot = new Node(null, {children:[]});
     }
 
     find(attrs) {

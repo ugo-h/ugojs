@@ -12,24 +12,14 @@ export default class Node {
     }
     render() {
         const element = document.createElement(this.type.toUpperCase());
-        this.renderChildren(element);
         this.addEventListeners(element);
         this.setAttributes(element);
         return element;
-    }
-    renderChildren(container) {
-        const { children } = this.props;
-        if(!children) return; 
-        children.forEach(child => {
-            render(child, container)
-        })
-
     }
 
     addEventListeners(container) {
         const { onClick } = this.props;
         if(onClick) {
-            console.log('adding event listener...');
             container.addEventListener('click', onClick);
         }
     }

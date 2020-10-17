@@ -5,16 +5,17 @@ class ClickBox extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            text: ''
+            text: 'ON',
+            isOn: true
         }
     }
     clickHandler() {
-        console.log('clicked on click box');
-        this.setState({text:'null'});
+        this.state.isOn?this.setState({text: 'OFF', isOn:false}) :this.setState({text: 'ON', isOn:true});
+        
     }
     render() {
         return(
-            createElement('div', {innerText: this.props.innerText, onClick:this.clickHandler.bind(this)})
+            createElement('button', {innerText: this.state.text, onClick:this.clickHandler.bind(this)})
         )
     }
 }

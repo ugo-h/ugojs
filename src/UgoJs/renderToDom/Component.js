@@ -1,25 +1,18 @@
-import Singleton from '../DomTree/DomTree';
-import VirtualDom from '../DomTree/DomTree';
 
-class Component extends Singleton{
+class Component {
     constructor(props) {
-        super();
         this.props = props;
+        this.state = {}
     }
 
     setProps(props) {
         this.props = props;
     }
-    static getInstance(...props) {
-        if(this._instance) {
-            this._instance.setProps(...props);
-            const node = this._instance.render();
-            return node;
-        } else {
-            this._instance = new this(...props)
-            const node = this._instance.render();
-            return node;
-        }
+
+    static createElement(...props) {
+        const node = new this(...props);
+        node.tree = node.render();
+        return node.tree;
     }
 
     render() {
@@ -30,15 +23,29 @@ class Component extends Singleton{
         if(!this.state) {
             throw new Error('State has not been initiated yet. Create this.state property in class constructor.')
         }
-        this._updateDom()
         this.state = { ...this.state, ...newState };
+        const node = this.render();
+        compareNodes(this.tree, node);
+        this.tree = node;
         
     }
-    _updateDom() {
-        const dom = VirtualDom.getInstance();
-        console.log(dom);
-        const {type, props} = this.render();
-        console.log(dom.find({type, props}));
+}
+
+function updateDom(node, element) {
+    const parentNode = element.parentNode;
+    element.remove();
+    const newElement = node.render();
+    parentNode.append(newElement);
+}
+
+function compareNodes(first, second) {
+    if(first !== second) {
+        const element = document.getElementById(first.props.id);
+        updateDom(second, element);
+    };
+    if(first.props.children.length !== second.props.children.length) return;
+    for(let i = 0; i < first.props.children.length; i++) {
+        compareTrees(first.props.children[i], second.props.children[i]);
     }
 }
 

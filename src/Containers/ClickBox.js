@@ -10,7 +10,7 @@ class ClickBox extends Component{
     }
     clickHandler() {
         console.log('clicked on click box');
-        this.setState({text:'null'})
+        this.setState({text:'null'});
     }
     render() {
         return(

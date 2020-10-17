@@ -4,13 +4,9 @@ import VirtualDom from '../DomTree/DomTree';
 
 function render(node, container) {
     const dom = VirtualDom.getInstance(node);
-    // console.log(dom);
+    console.log(dom)
     container.append(node.render());
 };
 
-function reRender(node) {
-    const dom = VirtualDom.getInstance(node);
-    dom.find(node);
-}
 
 export default render;

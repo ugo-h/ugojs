@@ -21,7 +21,6 @@ export default class Node {
         const { children } = this.props;
         if(!children) return; 
         children.forEach(child => {
-            child.setParentNode(this)
             render(child, container)
         })
 

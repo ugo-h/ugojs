@@ -1,5 +1,3 @@
-import render from '../renderToDom/render';
-
 export default class Node {
     constructor(type, props) {
         this.type = type;

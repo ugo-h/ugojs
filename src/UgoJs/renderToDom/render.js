@@ -1,8 +1,7 @@
-import Component from './Component'
 import VirtualDom from '../DomTree/DomTree';
 
 
-function render(node, container) {
+export function render(node, container) {
     const dom = VirtualDom.getInstance(node);
     renderTree(dom.root, container);
     dom.oldRoot = dom.root;
@@ -42,5 +41,3 @@ function compareTrees(first, second, identical=true) {
     }
     return identical;
 }
-
-export default render;

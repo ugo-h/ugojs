@@ -1,5 +1,5 @@
 
-class Component {
+export class Component {
     constructor(props) {
         this.props = props;
         this.state = {}
@@ -25,7 +25,7 @@ class Component {
         }
         this.state = { ...this.state, ...newState };
         const node = this.render();
-        compareNodes(this.tree, node);
+        compareVirtualDom(this.tree, node);
         this.tree = node;
         
     }
@@ -36,17 +36,27 @@ function updateDom(node, element) {
     element.remove();
     const newElement = node.render();
     parentNode.append(newElement);
+    console.log('DOM updated.')
 }
 
-function compareNodes(first, second) {
-    if(first !== second) {
-        const element = document.getElementById(first.props.id);
+function compareVirtualDom(first, second) {
+    const hasChanges = !compareNodes(first, second)
+    if(hasChanges) {
+        const {id} = first.props;
+        const element = document.getElementById(id);
         updateDom(second, element);
     };
     if(first.props.children.length !== second.props.children.length) return;
     for(let i = 0; i < first.props.children.length; i++) {
-        compareTrees(first.props.children[i], second.props.children[i]);
+        compareVirtualDom(first.props.children[i], second.props.children[i]);
     }
 }
-
-export default Component;
+function compareNodes(firstNode, secondNode) {
+    
+    for(const key in firstNode.props) {
+        // console.log(key)
+        if(key==='id'|| key==='children') continue;
+        if(firstNode.props[key] !== secondNode.props[key]) return false;
+    }
+    return true;
+}

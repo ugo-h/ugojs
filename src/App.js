@@ -1,5 +1,5 @@
-import { createElement } from './UgoJs/createElement/createElement';
-import Item from './Containers/Item';
+import { createElement } from './UgoJs/ugo';
+
 import ClickBox from './Containers/ClickBox';
 
 function App() {

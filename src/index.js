@@ -1,4 +1,4 @@
-import render from './UgoJs/renderToDom/render';
+import { render } from './UgoJs/ugo';
 import App from './App';
 
 render(App(), document.getElementById('root'));

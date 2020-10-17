@@ -1,5 +1,4 @@
-import Component from '../UgoJs/renderToDom/Component';
-import {createElement} from '../UgoJs/createElement/createElement';
+import {Component, createElement } from '../UgoJs/ugo';
 
 class ClickBox extends Component{
     constructor(props) {
@@ -8,16 +7,24 @@ class ClickBox extends Component{
             text: 'ON',
             isOn: true
         }
-    }
+    };
+
     clickHandler() {
-        this.state.isOn?this.setState({text: 'OFF', isOn:false}) :this.setState({text: 'ON', isOn:true});
+        // console.log(this.tree.props.children[0].props.id)
+        this.setState({isOn: !this.state.isOn})
         
-    }
+    };
+
     render() {
         return(
-            createElement('button', {innerText: this.state.text, onClick:this.clickHandler.bind(this)})
-        )
-    }
-}
+            createElement('div', {} ,
+                createElement('button', {
+                    innerText: this.state.isOn? 'On' : 'Off', 
+                    onClick:this.clickHandler.bind(this)} 
+                ),
+            )
+        );
+    };
+};
 
 export default ClickBox;

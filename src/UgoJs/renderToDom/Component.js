@@ -26,35 +26,69 @@ export class Component {
         this.state = { ...this.state, ...newState };
         const node = this.render();
         const element = document.getElementById(this.tree.props.id);
-        compareVirtualDom(this.tree, node, element, element.parentNode);
-        this.tree = node;
+        // console.log(element)
+        compareTrees(this.tree, node, element);
     }
 }
 
 
-function _updateDom(current, next, element, parent) {
-    // console.log(element);
-    console.log(parent);
-    // if(!next) {
-    //     parent.removeChild(element)
-    // } else if(!current) {
-    //     parent.appendChild(next.render())
-    // }
-    console.log('DOM updated.')
+
+
+function compareTrees(current, next, dom) {
+    if(!current || !next) return;
+    compareProps(current.props, next.props, dom);
+    compareChildren(current.props.children, next.props.children, dom);
 }
 
-export function compareVirtualDom(current, next, containers) {
-    if(!current && !next) return;
-    const hasChanges = !compareNodes(current, next)
-    if(hasChanges) {
-        // console.log(containers)
-        _updateDom(current, next, containers.element, containers.parent)
-    } 
-    for(let i = 0; i < current.props.children.length; i++) {
-        containers = unpackContainers(containers, i);
-        compareVirtualDom(current.props.children[i], next.props.children[i], containers);
+function compareProps(currentProps, nextProps, dom) {
+    const currentArr = Object.keys(currentProps);
+    const nextArr = Object.keys(nextProps);
+    
+    let arr = currentArr.length > nextArr.length? currentArr: nextArr;
+    for(let key of arr) {
+        if(key==='children' || key==='key'|| key==='id')  continue;
+        if(currentProps[key]!==nextProps[key]) {
+            if(!nextProps[key]) {
+                dom[key] = '';
+                delete currentProps[key];
+            }
+            if(!currentProps[key]) {
+                dom[key] = nextProps[key];
+                currentProps[key] = nextProps[key];
+            } else {
+                dom[key] = nextProps[key];
+                currentProps[key] = nextProps[key];
+            }
+        }
     }
 }
+
+function compareChildren(current, next, container) {
+    let len = Math.max(current.length, next.length);
+    // console.log(len)
+    for(let i = 0; i < len; i++) {
+        if(!current[i]) {
+            container.appendChild(next[i].render());
+            
+            current.push(next[i]);
+            continue;
+        } else if(!next[i]) {
+            container.removeChild(container.childNodes[i]);
+            
+            current.splice(i, 1);
+            continue;
+        } else if(current[i].type !== next[i].type) {
+            container.removeChild(container.childNodes[i]);
+            container.appendChild(next[i].render());
+            
+            current.splice(i, 1);
+            current.push(next[i]);
+            continue;
+        };
+        compareTrees(current[i], next[i], container.childNodes[i]);
+    }
+}
+
 export function compareNodes(firstNode, secondNode) {
     if(!secondNode || !firstNode) return false
     if(firstNode.type !== secondNode.type) return false;
@@ -68,36 +102,3 @@ export function compareNodes(firstNode, secondNode) {
 }
 
 
-
-function unpackContainers(containers, index) {
-    let { element, container } = containers;
-    container = element;
-    element = element.childNodes?element.childNodes[index]:element;  
-    return {element, container}
-}
-
-function updateDom(current, next, parent) {
-    console.log(parent)
-     // console.log(`current: ${!!current} next: ${!!next}`)
-     if (!current) {
-         parent.appendChild(
-           next.render()
-         );
-     } else if (!next) {
-         let element;
-         for(const child of parent.childNodes) {
-             if(child.id === current.props.id) element = child;
-         }
-         parent.removeChild(element)
-         } else {
-         parent.appendChild(
-             next.render()
-           );
-           let element;
-         for(const child of parent.childNodes) {
-             if(child.id === current.props.id) element = child;
-         }
-         parent.removeChild(element)
-     }
-     console.log('DOM updated.')
- }

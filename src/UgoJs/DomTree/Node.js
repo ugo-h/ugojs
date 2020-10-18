@@ -4,7 +4,6 @@ export default class Node {
     constructor(type, props) {
         this.type = type;
         this.props = props;
-        this.setParentNode(null);
         this.render = this.render.bind(this)
     }
   
@@ -18,7 +17,6 @@ export default class Node {
     renderChildren(container) {
         if(this.props.children === []) return;
         for(const child of this.props.children) {
-            if(child) child.setParentNode(this);
             render(child, container)
         }
     }

@@ -22,6 +22,7 @@ class ClickBox extends Component{
                     innerText: this.state.isOn? 'On' : 'Off', 
                     onClick:this.clickHandler.bind(this)} 
                 ),
+                this.state.isOn? createElement('p', {innerText: 'It is alive!'}): null
             )
         );
     };

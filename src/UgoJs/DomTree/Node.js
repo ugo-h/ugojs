@@ -1,3 +1,5 @@
+import {render} from '../renderToDom/render';
+
 export default class Node {
     constructor(type, props) {
         this.type = type;
@@ -5,16 +7,21 @@ export default class Node {
         this.setParentNode(null);
         this.render = this.render.bind(this)
     }
-    set parentNode(node) {
-        this.props.parentNode = node;
-    }
+  
     render() {
         const element = document.createElement(this.type.toUpperCase());
+        this.renderChildren(element)
         this.addEventListeners(element);
         this.setAttributes(element);
         return element;
     }
-
+    renderChildren(container) {
+        if(this.props.children === []) return;
+        for(const child of this.props.children) {
+            if(child) child.setParentNode(this);
+            render(child, container)
+        }
+    }
     addEventListeners(container) {
         const { onClick } = this.props;
         if(onClick) {
@@ -29,7 +36,7 @@ export default class Node {
         }
     }
     setParentNode(node) {
-        this.parentNode = node;
+        this.props.parentNode = node;
     }
     
 }

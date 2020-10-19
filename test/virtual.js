@@ -14,35 +14,7 @@ class Node{
     }
 }
 
-class FakeDom{
-    constructor(type, props, children) {
-        this.type = type;
-        this.props = props?props:{};
-        this.children = children? children:[];
-    }
 
-    setAttribute(name, value) {
-        this.props[name] = value;
-    }
-    deleteAtribute(name) {
-        delete this.props[name];
-    }
-    appendChild(child) {
-        this.children.push(child)
-    }
-    removeChild(index) {
-        this.children.splice(index, 1);
-    }
-    toString() {
-        const children = this.children.length>0?this.children.map(child => child.toString()).join(''):'';
-        let props = '';
-        for(const prop in this.props) {
-            props += ` ${prop}="${this.props[prop]}"`
-        }
-        let str = `<${this.type}${props}>${children}<${this.type}/>`;
-        return str;
-    }
-}
 
 function createElement(type, props={}, ...children) {
     if(!type) throw new Error('Element must have a "type" atribute.');

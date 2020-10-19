@@ -1,4 +1,4 @@
-export {Component} from './renderToDom/Component';
+export {Component} from './Component/Component';
 export {createElement} from './createElement/createElement';
-export {render} from './renderToDom/render';
+export {render} from './render/render';
 

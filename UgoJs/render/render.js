@@ -1,4 +1,4 @@
-import {Component} from './Component';
+import {Component} from '../ugo';
 
 export function render(node, container) {
     // const dom = VirtualDom.getInstance(node);

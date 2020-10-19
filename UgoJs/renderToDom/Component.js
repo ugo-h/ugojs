@@ -12,6 +12,7 @@ export class Component {
     static createElement(...props) {
         const node = new this(...props);
         node.tree = node.render();
+        setTimeout(() => node.componentDidMount(), 0)
         return node.tree;
     }
 
@@ -19,22 +20,24 @@ export class Component {
 
     }
 
+    componentDidMount() {
+
+    }
+
     setState(newState) {
         if(!this.state) {
             throw new Error('State has not been initiated yet. Create this.state property in class constructor.')
         }
-        this.state = { ...this.state, ...newState };
+        for(const key in newState) {
+            this.state[key] = newState[key];
+        }
         const node = this.render();
         const element = document.getElementById(this.tree.props.id);
-        // console.log(element)
         compareTrees(this.tree, node, element);
     }
 }
 
-
-
-
-function compareTrees(current, next, dom) {
+export function compareTrees(current, next, dom) {
     if(!current || !next) return;
     compareProps(current.props, next.props, dom);
     compareChildren(current.props.children, next.props.children, dom);
@@ -65,7 +68,6 @@ function compareProps(currentProps, nextProps, dom) {
 
 function compareChildren(current, next, container) {
     let len = Math.max(current.length, next.length);
-    // console.log(len)
     for(let i = 0; i < len; i++) {
         if(!current[i]) {
             container.appendChild(next[i].render());
@@ -76,6 +78,8 @@ function compareChildren(current, next, container) {
             container.removeChild(container.childNodes[i]);
             
             current.splice(i, 1);
+            i--;
+            len--;
             continue;
         } else if(current[i].type !== next[i].type) {
             container.removeChild(container.childNodes[i]);
@@ -87,18 +91,6 @@ function compareChildren(current, next, container) {
         };
         compareTrees(current[i], next[i], container.childNodes[i]);
     }
-}
-
-export function compareNodes(firstNode, secondNode) {
-    if(!secondNode || !firstNode) return false
-    if(firstNode.type !== secondNode.type) return false;
-    if(firstNode.props.key !== secondNode.props.key) return false;
-
-    for(const key in firstNode.props) {
-        if(key==='id'|| key==='children' || key === 'key') continue;
-        if(firstNode.props[key] !== secondNode.props[key]) return false;
-    }
-    return true;
 }
 
 

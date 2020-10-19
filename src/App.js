@@ -1,15 +1,17 @@
-import { createElement } from './UgoJs/ugo';
+import { createElement } from '../UgoJs/ugo';
 
-import ClickBox from './Containers/ClickBox';
+import './App.css';
+import List from './Containers/List';
+import Parent from './Containers/ClickBox';
+import Posts from './Containers/Posts';
 
 function App() {
-    return createElement('div', {className: 'App'},
+    return createElement('div', { className: 'App' },
         createElement('h1', {
             innerText:'Hello world'
         }),
-        createElement('p', {innerText:'Bonjour'}),
-        
-        ClickBox.createElement({})
+        createElement(Parent, {}),
+        createElement(Posts, {})
     );
 }
 

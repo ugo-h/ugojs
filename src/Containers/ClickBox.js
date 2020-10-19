@@ -1,31 +1,44 @@
-import {Component, createElement } from '../UgoJs/ugo';
+import {Component, createElement } from '../../UgoJs/ugo';
 
-class ClickBox extends Component{
+class Parent extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            text: 'ON',
-            isOn: true
+            value: 0
         }
     };
 
     clickHandler() {
-        // console.log(this.tree.props.children[0].props.id)
-        this.setState({isOn: !this.state.isOn})
+        this.setState({value: this.state.value+1})
         
     };
 
     render() {
         return(
             createElement('div', {} ,
-                createElement('button', {
-                    innerText: this.state.isOn? 'On' : 'Off', 
-                    onClick:this.clickHandler.bind(this)} 
-                ),
-                this.state.isOn? createElement('p', {innerText: 'It is alive!'}): null
+                createElement(Child, {
+                    value: this.state.value, 
+                    click:this.clickHandler.bind(this) }
+                )
             )
         );
     };
 };
 
-export default ClickBox;
+class Child extends Component{
+    componentDidMount() {
+        console.log('Child component did mount')
+    }
+    render() {
+        console.log('[Child] render')
+        return(
+            createElement('button', {
+                innerText: this.props.value, 
+                onClick:this.props.click} 
+            )
+        )
+    }
+}
+
+
+export default Parent;

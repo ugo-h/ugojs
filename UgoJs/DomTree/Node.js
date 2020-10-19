@@ -21,20 +21,38 @@ export default class Node {
         }
     }
     addEventListeners(container) {
-        const { onClick } = this.props;
+        const { onClick, onChange } = this.props;
         if(onClick) {
             container.addEventListener('click', onClick);
+        }
+        if(onChange) {
+            container.addEventListener('change', onChange);
         }
     }
 
     setAttributes(container) {
         for(const prop in this.props) {
             if(prop === 'children' || prop === 'innerHtml' || prop === 'parentNode') continue;
+            if(prop === 'style') {
+                for(const style in this.props[prop]) {
+                    container.style[style] = this.props.style[style]
+                }
+                continue;
+            }
             container[prop] = this.props[prop];
         }
     }
     setParentNode(node) {
         this.props.parentNode = node;
+    }
+    toString() {
+        const children = this.props.children.length>0?this.props.children.map(child => child.toString()).join(''):'';
+        let props = '';
+        for(const prop in this.props) {
+            props += ` ${prop}="${this.props[prop]}"`
+        }
+        let str = `<${this.type}${props}>${children}<${this.type}/>`;
+        return str;
     }
     
 }

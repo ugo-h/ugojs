@@ -33,6 +33,15 @@ class FakeDom{
     removeChild(index) {
         this.children.splice(index, 1);
     }
+    toString() {
+        const children = this.children.length>0?this.children.map(child => child.toString()).join(''):'';
+        let props = '';
+        for(const prop in this.props) {
+            props += ` ${prop}="${this.props[prop]}"`
+        }
+        let str = `<${this.type}${props}>${children}<${this.type}/>`;
+        return str;
+    }
 }
 
 function createElement(type, props={}, ...children) {
@@ -86,23 +95,17 @@ function compareChildren(current, next, container) {
 
 function traverseTree(root, callback, depth='') {
     if(!root) return;
-    callback(depth+ root.type)
-    callback(`${depth}className: ${root.props.className}`)
+    callback(root)
     root.children.forEach(child => {
         traverseTree(child, callback, depth+' ');
     })
 }
 
-const tree1 = createElement('div', {}, createElement('p'));
+const tree1 = createElement('div', {className:'App'}, createElement('p', {}), createElement('img', {}));
 const tree2 = createElement('div', {className:'class1'}, createElement('div', {}, createElement('img', {className:'img-1'}),  createElement('img', {className:'img-2'})) );
 const fakeDom = tree1.render();
 
-// console.log(tree1, fakeDom)
-
-compareTrees(tree1, tree2, fakeDom)
-
-traverseTree(fakeDom, console.log)
-
+console.log(fakeDom.toString())
 
 
 

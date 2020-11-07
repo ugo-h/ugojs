@@ -1,13 +1,18 @@
 import { createElement, Component } from './ugojs/ugo';
 
-class App extends Component {
+class Item extends Component {
     render() {
-        return(
-            createElement('div', {className: 'App'}, 
-                createElement('h1', {}, 'Hello World!')
-            )
-        )
+        return(createElement('p', {}, 'This app is made with ugo.js'))
     }
+}
+
+function App() {
+    return(
+        createElement('div', {className: 'App'}, 
+            createElement('h1', {}, 'Hello World!'),
+            createElement(Item, {})
+        )
+    )
 };
 
 export default App;

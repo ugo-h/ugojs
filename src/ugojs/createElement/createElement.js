@@ -3,6 +3,7 @@ import {Component} from '../ugo';
 
 export function createElement(type, props, ...children) {
     if(!type) throw new Error(`createElement expected 'type' argument of type 'Component', Function or string. Recieved '${type}'`)
+    if(!props) props = {};
     if(type.__proto__ === Component) {
         const node = type.createElement(props, children);
         return node;

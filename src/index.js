@@ -1,4 +1,4 @@
 import { render } from './ugojs/ugo';
-import App from './app';
+import App from './App';
 
-render(App.createElement(), document.getElementById('root'));
+render(App, document.getElementById('root'));

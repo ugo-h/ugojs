@@ -1,4 +1,4 @@
-import {createElement} from '../UgoJs/ugo';
+import {createElement} from '../src/ugo';
 
 
 test('test createElement', () => {

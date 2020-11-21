@@ -1,4 +1,5 @@
 import { createElement, Component } from './ugojs/ugo';
+import './App.css';
 
 class Item extends Component {
     render() {
@@ -9,8 +10,8 @@ class Item extends Component {
 function App() {
     return(
         createElement('div', {className: 'App'}, 
-            createElement('h1', {}, 'Hello World!'),
-            createElement(Item, {})
+            createElement('h1', {className: 'App__title'}, 'Hello World!'),
+            createElement(Item, {}),
         )
     )
 };
